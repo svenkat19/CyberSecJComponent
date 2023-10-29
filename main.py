@@ -12,7 +12,6 @@ if __name__ == "__main__":
     parser.add_argument('-v', '--verbose', action="store_true", help="Verbose output")
     parser.add_argument('-e', '--eve', action="store_true", help="Eve is present")
     args = parser.parse_args()
-
     key_amount = args.key_amount
     key_size = args.key_size
     verbose = args.verbose
