@@ -7,16 +7,13 @@ def cast_vote(candidate):
     intercepted = random.choice([True, False])
 
     if intercepted:
-        status_label.config(text="Vote Invalid (Eve Intercepted)", fg="red")
-        valid = False
-        show_eve_error_box()  # Call the error message box
+        show_eve_error_box()  # Display the error message box for Eve's interception
     else:
-        status_label.config(text="Vote Cast Successfully", fg="green")
-        valid = True
+        success_message = f"Vote for {candidate} was cast successfully!"
+        show_success_box(success_message)  # Display a success message dialog
+    update_vote_count(candidate)  # Increment the valid votes in the database
 
-    insert_vote(candidate, valid)
-
-def insert_vote(candidate, valid):
+def update_vote_count(candidate):
     db = mysql.connector.connect(
         host="localhost",
         user="root",
@@ -25,12 +22,26 @@ def insert_vote(candidate, valid):
     )
     cursor = db.cursor()
 
-    cursor.execute("INSERT INTO votes (candidate, valid) VALUES (%s, %s)", (candidate, valid))
+    # Check if a record for the candidate exists
+    cursor.execute("SELECT id FROM votes WHERE candidate = %s", (candidate,))
+    result = cursor.fetchone()
+
+    if result:
+        # If a record exists, increment the valid column
+        cursor.execute("UPDATE votes SET valid = valid + 1 WHERE candidate = %s", (candidate,))
+    else:
+        # If no record exists, insert a new record with a valid vote
+        cursor.execute("INSERT INTO votes (candidate, valid) VALUES (%s, %s)", (candidate, 1))
+
     db.commit()
     db.close()
 
 def show_eve_error_box():
     messagebox.showerror("Eve Intercepted", "Your vote has been intercepted by Eve. Please try again.")
+    update_vote_count("EveIntercepted")  # Increment the valid votes for Eve
+
+def show_success_box(message):
+    messagebox.showinfo("Vote Successful", message)
 
 root = tk.Tk()
 root.title("Voting System")
