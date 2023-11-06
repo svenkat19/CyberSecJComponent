@@ -3,19 +3,9 @@ from tkinter import font, messagebox
 import mysql.connector
 import random
 
-import subprocess
-
-# Replace 'other_script.py' with the name of the Python script you want to run
-command = 'python D:\VIT\Fall_Semester_2023-24\CyberSec\Project\CyberSecJComponent\main.py 1 16 -v'
-
-
-
 def cast_vote(candidate):
     intercepted = random.choice([True, False])
-    try:
-        subprocess.run(command, shell=True, check=True)
-    except subprocess.CalledProcessError as e:
-        print(f"Error running the command: {e}")
+
     if intercepted:
         show_eve_error_box()  # Display the error message box for Eve's interception
     else:

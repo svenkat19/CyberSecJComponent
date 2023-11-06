@@ -43,11 +43,8 @@ if __name__ == "__main__":
         if verbose:
             print(" Alice's key:", alice_key)
             print(" Bob's key:", bob_key)
-            print(" Eve detected:", alice_key != bob_key)
-            print(" Eve detected {}/{} times".format(detected, key_amount))
             print()
 
-    print("Eve detected {}/{} times".format(detected, key_amount))
 
 
 '''''import random
